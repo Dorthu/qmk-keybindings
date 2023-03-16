@@ -46,13 +46,6 @@ const char* emote_lookup[11] = {
     "eyes", // bottom row, fourth key
 };
 
-/*
- how long to wait between entering a slack emoji reaction key sequence (CMD+SHIFT+\
- plus the emoji name) and pressing enter.  This is necessary because slack is slow,
- and without this long of a delay it will submit the reaction before finding the correct
- emote in the menu.  It's an awkwardly long time, but I'm not sure I can do better
- */
-const int SLACK_REACT_ENTER_DELAY_MS = 1000;
 
 const char* layer_name(int layer) {
     // these returned strings should be of length 6
@@ -150,7 +143,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
                 send_string(slack_emote(keycode));
                 if (slack_mod_pressed) {
-                    send_string(SS_DELAY(SLACK_REACT_ENTER_DELAY_MS) "\n");
+                    /*
+                     how long to wait between entering a slack emoji reaction key sequence (CMD+SHIFT+\
+                     plus the emoji name) and pressing enter.  This is necessary because slack is slow,
+                     and without this long of a delay it will submit the reaction before finding the correct
+                     emote in the menu.  It's an awkwardly long time, but I'm not sure I can do better
+                     */
+                    send_string(SS_DELAY(1000) "\n");
                 } else {
                     send_string(": ");
                 }
